@@ -15,6 +15,14 @@ describe('chord sheet parser', () => {
     expect(chart.lines[1].output).toBe('[1]Amazing [4]grace')
   })
 
+  it('preserves German lyrics while converting only their inline chords', () => {
+    const chart = buildChart('[Vers 1]\n[G]Mein Erlöser [C]lebt für immer', gMajor)
+    expect(chart.lines[1]).toMatchObject({
+      kind: 'mixed',
+      output: '[1]Mein Erlöser [4]lebt für immer',
+    })
+  })
+
   it('keeps unique chord mappings', () => {
     const chart = buildChart('G D Em C\nG D C', gMajor)
     expect(chart.mappings).toEqual([

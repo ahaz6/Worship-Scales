@@ -2,6 +2,7 @@ import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist'
 import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
 import { createWorker } from 'tesseract.js'
 import type { ImportProgress } from '../types'
+import { normalizeImportedText } from './text'
 
 GlobalWorkerOptions.workerSrc = pdfWorkerUrl
 
@@ -62,7 +63,7 @@ async function recognizeImage(
   pageIndex = 0,
   pageCount = 1,
 ): Promise<string> {
-  const worker = await createWorker('eng', undefined, {
+  const worker = await createWorker(['deu', 'eng'], undefined, {
     logger: (message) => {
       if (message.status !== 'recognizing text') return
       const pageProgress = (pageIndex + message.progress) / pageCount
@@ -160,5 +161,5 @@ export async function extractDocument(file: File, onProgress?: ProgressCallback)
   }
 
   emit(onProgress, 'analysing', 'Akkorde und Tonart werden analysiert', 0.96)
-  return text.replace(/\u0000/g, '').trim()
+  return normalizeImportedText(text)
 }

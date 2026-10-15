@@ -30,6 +30,7 @@ import {
 } from 'lucide-react'
 import { detectKey, KEY_ROOTS, keyLabel } from './lib/music'
 import { buildChart, chartToPlainText } from './lib/parser'
+import { normalizeImportedText } from './lib/text'
 import type { ImportProgress, KeyDetection, KeyMode } from './types'
 
 const DEMO_TEXT = `Amazing Grace
@@ -139,7 +140,9 @@ export default function App() {
   }
 
   function reanalyse() {
-    const nextDetection = detectKey(sourceText)
+    const normalizedText = normalizeImportedText(sourceText)
+    const nextDetection = detectKey(normalizedText)
+    setSourceText(normalizedText)
     setDetection(nextDetection)
     setRoot(nextDetection.root)
     setMode(nextDetection.mode)

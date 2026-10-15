@@ -15,10 +15,12 @@
   --line-strong: #353541;
   --text: #efeff4;
   --text-soft: #b5b3c1;
+  --lyrics: #f6f5ff;
   --muted: #85858f;
   --muted-2: #62626c;
   --accent: #7668b7;
   --accent-bright: #9d8cff;
+  --scale: #9d8cff;
   --accent-dim: rgba(118, 104, 183, 0.14);
   --indigo: #4e5fc6;
   --blue: #5d7fe6;
@@ -969,7 +971,7 @@ button:disabled {
 
 .number-line {
   min-height: 26px;
-  color: var(--accent-bright);
+  color: var(--scale);
   font-size: 15px;
   font-weight: 730;
   letter-spacing: 0.02em;
@@ -979,9 +981,9 @@ button:disabled {
 .lyric-line,
 .mixed-line {
   min-height: 25px;
-  color: #b5b3c1;
-  font-size: 12px;
-  font-weight: 430;
+  color: var(--lyrics);
+  font-size: 13px;
+  font-weight: 500;
   line-height: 1.9;
 }
 
@@ -1001,7 +1003,7 @@ button:disabled {
   border: 1px solid rgba(157, 140, 255, 0.22);
   border-radius: 6px;
   background: var(--accent-dim);
-  color: var(--accent-bright);
+  color: var(--scale);
   font-size: 10px;
   font-weight: 750;
 }
@@ -1105,7 +1107,7 @@ button:disabled {
 }
 
 .mapping-row strong {
-  color: var(--accent-bright);
+  color: var(--scale);
   font-size: 13px;
   text-align: right;
 }
