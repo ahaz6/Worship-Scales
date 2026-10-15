@@ -3,7 +3,7 @@ import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
 import { createWorker } from 'tesseract.js'
 import type { ImportProgress } from '../types'
 import { orderTextColumns } from './layout'
-import { normalizeImportedText } from './text'
+import { prepareChordSheetText } from './source'
 
 GlobalWorkerOptions.workerSrc = pdfWorkerUrl
 
@@ -176,5 +176,5 @@ export async function extractDocument(file: File, onProgress?: ProgressCallback)
   }
 
   emit(onProgress, 'analysing', 'Akkorde und Tonart werden analysiert', 0.96)
-  return normalizeImportedText(text)
+  return prepareChordSheetText(text)
 }

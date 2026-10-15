@@ -30,7 +30,7 @@ import {
 } from 'lucide-react'
 import { detectKey, KEY_ROOTS, keyLabel } from './lib/music'
 import { buildChart, chartToPlainText } from './lib/parser'
-import { normalizeImportedText } from './lib/text'
+import { findSuspiciousChordTokens, prepareChordSheetText } from './lib/source'
 import type { ImportProgress, KeyDetection, KeyMode } from './types'
 
 const DEMO_TEXT = `Amazing Grace
@@ -104,6 +104,7 @@ export default function App() {
   const [copied, setCopied] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sourceIsOcr, setSourceIsOcr] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const rootChoice = KEY_ROOTS.find((choice) => choice.root === root) ?? KEY_ROOTS[0]
@@ -112,6 +113,7 @@ export default function App() {
     () => buildChart(sourceText, selectedKey, applyCapo ? capo : 0, fileName),
     [sourceText, selectedKey.root, selectedKey.pitchClass, selectedKey.mode, applyCapo, capo, fileName],
   )
+  const suspiciousTokens = useMemo(() => findSuspiciousChordTokens(sourceText), [sourceText])
 
   async function loadFile(file: File) {
     setError(null)
@@ -122,6 +124,7 @@ export default function App() {
       const { extractDocument } = await import('./lib/extract')
       const text = await extractDocument(file, setProgress)
       const nextDetection = detectKey(text)
+      setSourceIsOcr(file.type.startsWith('image/') || /\.(png|jpe?g|webp|bmp)$/i.test(file.name))
       setSourceText(text)
       setDetection(nextDetection)
       setRoot(nextDetection.root)
@@ -140,7 +143,7 @@ export default function App() {
   }
 
   function reanalyse() {
-    const normalizedText = normalizeImportedText(sourceText)
+    const normalizedText = prepareChordSheetText(sourceText)
     const nextDetection = detectKey(normalizedText)
     setSourceText(normalizedText)
     setDetection(nextDetection)
@@ -150,6 +153,7 @@ export default function App() {
     setApplyCapo(nextDetection.capo > 0)
     setActiveView('chart')
     setError(null)
+    if (normalizedText !== sourceText) setSourceIsOcr(false)
   }
 
   async function copyChart() {
@@ -169,6 +173,7 @@ export default function App() {
     setApplyCapo(false)
     setActiveView('source')
     setSidebarOpen(false)
+    setSourceIsOcr(false)
   }
 
   return (
@@ -346,6 +351,18 @@ export default function App() {
             <div className="error-banner"><Info size={18} /><span>{error}</span><button onClick={() => setError(null)}><X size={16} /></button></div>
           )}
 
+          {(sourceIsOcr || suspiciousTokens.length > 0) && (
+            <div className="ocr-warning">
+              <Info size={18} />
+              <span>
+                {suspiciousTokens.length
+                  ? `Akkorde prüfen: ${suspiciousTokens.slice(0, 5).join(', ')} wirken wie OCR-Fehler. Der erkannte Key bestätigt diese Akkorde nicht.`
+                  : 'Screenshot-OCR kann Akkordbuchstaben und Zusätze falsch lesen. Vergleiche die Akkorde mit dem Original.'}
+              </span>
+              <button onClick={() => setActiveView('source')}>Texteditor öffnen</button>
+            </div>
+          )}
+
           <section className="chart-panel">
             <div className="chart-toolbar">
               <div className="view-tabs">
@@ -419,14 +436,18 @@ export default function App() {
             ) : (
               <div className="source-editor">
                 <div className="source-help">
-                  <div><FileText size={17} /><span><strong>Erkannten Text korrigieren</strong> · Akkorde über den jeweiligen Lyrics stehen lassen.</span></div>
+                  <div><FileText size={17} /><span><strong>Originaltext hier einfügen</strong> · Ultimate-Guitar-Akkorde wie **E7** werden beim Analysieren erkannt.</span></div>
                   <span>{sourceText.length.toLocaleString('de-DE')} Zeichen</span>
                 </div>
                 <textarea
                   value={sourceText}
-                  onChange={(event) => setSourceText(event.target.value)}
+                  onChange={(event) => {
+                    setSourceText(event.target.value)
+                    setSourceIsOcr(false)
+                  }}
                   placeholder={'Songtitel\nKey: G\n\n[Verse 1]\nG       C\nText ...'}
-                  spellCheck={false}
+                  spellCheck
+                  lang="de"
                 />
                 <div className="source-footer">
                   <span><PanelLeftClose size={15} /> Änderungen werden lokal verarbeitet.</span>

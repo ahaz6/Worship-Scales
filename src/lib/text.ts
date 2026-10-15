@@ -18,10 +18,15 @@ export function normalizeImportedText(text: string): string {
   )
 
   return repaired
+    .replace(/&#(?:x20|32);|&nbsp;/gi, ' ')
+    .replace(/\\:/g, ':')
+    .replace(/\\(?=\r?\n)/g, '')
     .replace(/\r\n?/g, '\n')
     .replace(/[\u0000\uFEFF]/g, '')
     .replace(/\u00ad/g, '')
     .replace(/\u00a0/g, ' ')
     .normalize('NFC')
+    .replace(/\bErl(?:o|ó|é)ser\b/g, 'Erlöser')
+    .replace(/\berl(?:o|ó|é)ser\b/g, 'erlöser')
     .trim()
 }

@@ -793,6 +793,35 @@ button:disabled {
   color: inherit;
 }
 
+.ocr-warning {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border: 1px solid rgba(200, 155, 97, 0.36);
+  border-radius: 12px;
+  background: rgba(200, 155, 97, 0.1);
+  color: #f2d7ad;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.ocr-warning svg {
+  flex: 0 0 auto;
+}
+
+.ocr-warning button {
+  flex: 0 0 auto;
+  margin-left: auto;
+  padding: 7px 10px;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font-size: 10px;
+}
+
 .chart-panel {
   overflow: hidden;
   border-radius: var(--radius-xl);
@@ -1428,6 +1457,15 @@ button:disabled {
     padding: 18px;
   }
 
+  .ocr-warning {
+    flex-wrap: wrap;
+  }
+
+  .ocr-warning button {
+    width: 100%;
+    margin-left: 0;
+  }
+
   .source-help > span,
   .source-footer > span {
     display: none;
@@ -1459,6 +1497,7 @@ button:disabled {
   .intro-row,
   .control-grid,
   .error-banner,
+  .ocr-warning,
   .chart-toolbar,
   .mapping-panel {
     display: none !important;

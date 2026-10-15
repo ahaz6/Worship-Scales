@@ -4,6 +4,7 @@ import { chordToNashville, parseChord } from './music'
 const SECTION_PATTERN = /^\s*\[?\s*(verse|vers|strophe|chorus|chor|refrain|pre[- ]?chorus|bridge|brücke|intro|outro|instrumental|interlude|tag|turnaround|ending)(?:\s+\d+)?\s*\]?\s*:??\s*$/i
 const META_PATTERN = /^\s*(key|tonart|capo|tuning|stimmung|tempo|bpm|title|titel|artist|interpret|von|description|beschreibung|difficulty|schwierigkeit)\s*[:=\-]/i
 const URL_PATTERN = /^\s*https?:\/\/\S+\s*$/i
+const UG_HEADING = /^\s*(.+?)\s+Chords\s+by\s+(.+?)\s*$/i
 
 function tokenIsStructural(token: string): boolean {
   return /^[|:.,/\\]+$/.test(token)
@@ -14,6 +15,7 @@ function lineKind(source: string): LineKind {
   if (SECTION_PATTERN.test(source)) return 'section'
   if (META_PATTERN.test(source)) return 'meta'
   if (URL_PATTERN.test(source)) return 'meta'
+  if (UG_HEADING.test(source)) return 'meta'
 
   const inlineChords = [...source.matchAll(/\[([^\]]+)\]/g)].filter((match) => parseChord(match[1]))
   if (inlineChords.length) return 'mixed'
@@ -43,6 +45,8 @@ function convertMixedLine(line: string, key: KeyChoice, capo: number): string {
 function extractTitle(text: string, fileName?: string): string {
   const titleMeta = text.match(/^\s*(?:title|titel)\s*[:=\-]\s*(.+)$/im)?.[1]?.trim()
   if (titleMeta) return titleMeta
+  const ugHeading = text.match(/^\s*(.+?)\s+Chords\s+by\s+(.+?)\s*$/im)
+  if (ugHeading) return ugHeading[1].trim()
 
   const lines = text.split(/\r?\n/)
   const firstSection = lines.findIndex((line) => SECTION_PATTERN.test(line))
@@ -58,6 +62,7 @@ function extractTitle(text: string, fileName?: string): string {
 
 function extractArtist(text: string): string | undefined {
   return text.match(/^\s*(?:artist|interpret|von)\s*[:=\-]\s*(.+)$/im)?.[1]?.trim()
+    ?? text.match(/^\s*.+?\s+Chords\s+by\s+(.+?)\s*$/im)?.[1]?.trim()
 }
 
 export function buildChart(text: string, key: KeyChoice, capo = 0, fileName?: string): SongChart {

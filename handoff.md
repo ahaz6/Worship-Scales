@@ -26,6 +26,8 @@ Worship Scales verwandelt Chord-Sheets aus PDF-Dateien, Screenshots oder eingef�
 - Automatische Tonartbewertung für 12 Tonzentren in Dur/Moll
 - Erkennung expliziter Key- und Capo-Metadaten
 - Akkordzeilen sowie Ultimate-Guitar-artige `[G]Inline-Akkorde`
+- Kopierter Ultimate-Guitar-Markdowntext mit `**E7**`, Songtitel, Artist und Abschnitten
+- Warnung bei verdächtigen OCR-Akkordfragmenten statt scheinbar sicherer Umrechnung
 - Erhalt von `m`, `maj7`, `7`, `sus`, `add`, `dim`, `aug` und Slash-Bässen
 - Editierbarer Quelltext für OCR-Korrekturen
 - Unklare OCR-Zeilen werden nicht als vollständige Akkordzeilen eingefärbt
@@ -38,6 +40,7 @@ Worship Scales verwandelt Chord-Sheets aus PDF-Dateien, Screenshots oder eingef�
 ## Bewusste Grenzen
 
 - OCR kann bei unscharfen, gedrehten oder stark dekorierten Vorlagen Korrekturen benötigen.
+- OCR kann einen musikalisch gültigen, aber falschen Akkord erkennen (z. B. `E7` als `D`); zum Gegenprüfen den Originaltext des Tabs einfügen.
 - Ein PDF ohne maschinenlesbaren Text wird seitenweise gerendert und erkannt; große Dokumente dauern entsprechend länger.
 - Die Key-Erkennung ist eine musikalische Heuristik. Modulationen und modale Songs brauchen gegebenenfalls eine manuelle Key-Wahl.
 - Die App lädt keine Lyrics oder Ultimate-Guitar-Inhalte selbst herunter. Importiert werden ausschließlich Dateien bzw. Texte, die die nutzende Person bereitstellt und verwenden darf.
