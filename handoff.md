@@ -12,7 +12,7 @@ Worship Scales verwandelt Chord-Sheets aus PDF-Dateien, Screenshots oder eingef�
 4. Eine angegebene Tonart (`Key: G`, `Tonart: D`) bevorzugen, ansonsten aus den Akkorden schätzen.
 5. Capo-Angaben erkennen und die klingenden Akkorde berücksichtigen.
 6. Tonart und Dur/Moll manuell korrigieren können.
-7. Akkorde in Nashville-Zahlen umwandeln, inklusive Moll, Septakkorden, Erweiterungen, Vorzeichen und Slash-Bässen.
+7. Akkorde in Nashville-Zahlen umwandeln, inklusive Moll, Septakkorden, Erweiterungen, Vorzeichen und Slash-Bässen. Der Grundtonbuchstabe bestimmt die Stufe; Erweiterungsziffern werden zur Unterscheidung hochgestellt (`E7` in E-Dur → `1⁷`).
 8. Chart kopieren oder über den Browser drucken/als PDF sichern.
 
 ## Implementierter Umfang

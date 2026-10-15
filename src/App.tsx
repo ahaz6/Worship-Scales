@@ -409,7 +409,7 @@ export default function App() {
                   </div>
                   <div className="mapping-tip">
                     <Sparkles size={15} />
-                    <span><strong>Band-Tipp</strong> Die Zahl bleibt gleich, auch wenn ihr den Song transponiert.</span>
+                    <span><strong>Band-Tipp</strong> Bei E7 bestimmt E die Stufe; ⁷ ist nur der Akkordzusatz.</span>
                   </div>
                 </aside>
               </div>

@@ -25,6 +25,16 @@ describe('chord sheet parser', () => {
     ])
   })
 
+  it('converts the seventh chords in Mein Erlöser lebt from their root letters', () => {
+    const eMajor = { root: 'E', pitchClass: 4, mode: 'major' as const }
+    const source = 'Mein Erlöser lebt\nKey: E\n\nE7 A7 E7 A7\nC#m7 B7 A E'
+    const chart = buildChart(source, eMajor)
+
+    expect(chart.lines[3].output).toBe('1⁷ 4⁷ 1⁷ 4⁷')
+    expect(chart.lines[4].output).toBe('6m⁷ 5⁷ 4 1')
+    expect(chart.mappings).toContainEqual({ chord: 'E7', number: '1⁷' })
+  })
+
   it('uses header metadata without repeating it in the chart body', () => {
     const chart = buildChart('Amazing Grace\nArtist: Traditional\nKey: G\n\nG C', gMajor)
     expect(chart.title).toBe('Amazing Grace')

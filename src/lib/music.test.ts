@@ -15,8 +15,17 @@ describe('Nashville conversion', () => {
 
   it('preserves slash basses and extensions', () => {
     expect(chordToNashville('D/F#', gMajor)).toBe('5/7')
-    expect(chordToNashville('Am7', gMajor)).toBe('2m7')
-    expect(chordToNashville('Dsus4', gMajor)).toBe('5sus4')
+    expect(chordToNashville('Am7', gMajor)).toBe('2m⁷')
+    expect(chordToNashville('Dsus4', gMajor)).toBe('5sus⁴')
+  })
+
+  it('uses the chord letter for the degree and marks extension digits separately', () => {
+    const eMajor = { root: 'E', pitchClass: 4, mode: 'major' as const }
+    expect(chordToNashville('E7', eMajor)).toBe('1⁷')
+    expect(chordToNashville('e7', eMajor)).toBe('1⁷')
+    expect(chordToNashville('A7', eMajor)).toBe('4⁷')
+    expect(chordToNashville('C#m7', eMajor)).toBe('6m⁷')
+    expect(chordToNashville('B7', eMajor)).toBe('5⁷')
   })
 
   it('marks borrowed chromatic chords', () => {
@@ -49,5 +58,11 @@ describe('chord and key analysis', () => {
     expect(detection.root).toBe('G')
     expect(detection.mode).toBe('major')
     expect(detection.chordCount).toBeGreaterThan(3)
+  })
+
+  it('infers E major for Mein Erlöser lebt without confusing seventh extensions with degrees', () => {
+    const detection = detectKey('E7 A7 E7 A7\nC#m7 B7 A E')
+    expect(detection).toMatchObject({ root: 'E', mode: 'major', source: 'inferred' })
+    expect(detection.chordCount).toBe(8)
   })
 })

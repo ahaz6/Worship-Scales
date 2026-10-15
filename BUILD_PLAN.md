@@ -3,7 +3,7 @@
 ## 1. Recherche und Regeln
 
 - Nashville-Zahlen bilden die Stufen einer gewählten Tonleiter ab.
-- Akkordqualität bleibt relevant: `2m`, `5(7)`, `7°` und `5/7` transportieren mehr Information als eine nackte Ziffer.
+- Akkordqualität bleibt relevant: `2m`, `5⁷`, `7°` und `5/7` transportieren mehr Information als eine nackte Ziffer. Erweiterungsziffern werden hochgestellt, damit zum Beispiel bei `E7 → 1⁷` eindeutig der Buchstabe E die Stufe bestimmt.
 - Nicht-diatonische Akkorde benötigen Vorzeichen, beispielsweise `b7` oder `#4`.
 - Ultimate-Guitar-Exporte nutzen überwiegend Akkorde über dem Text oder Akkorde in eckigen Klammern.
 - Eine Capo-Angabe verändert die klingende Tonart; die gedruckten Griff-Akkorde müssen vor der Stufenberechnung transponiert werden.

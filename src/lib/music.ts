@@ -106,6 +106,19 @@ export function chordQuality(chord: ParsedChord): 'major' | 'minor' | 'diminishe
   return 'major'
 }
 
+const SUPERSCRIPT_DIGITS: Record<string, string> = {
+  '0': '⁰',
+  '1': '¹',
+  '2': '²',
+  '3': '³',
+  '4': '⁴',
+  '5': '⁵',
+  '6': '⁶',
+  '7': '⁷',
+  '8': '⁸',
+  '9': '⁹',
+}
+
 function normalizeSuffix(suffix: string): string {
   if (!suffix) return ''
   return suffix
@@ -115,6 +128,7 @@ function normalizeSuffix(suffix: string): string {
     .replace(/^o(?=\d|$)/i, '°')
     .replace(/^aug/i, '+')
     .replace(/^-/, 'm')
+    .replace(/\d/g, (digit) => SUPERSCRIPT_DIGITS[digit])
 }
 
 export function intervalToDegree(interval: number, mode: KeyMode): string {
