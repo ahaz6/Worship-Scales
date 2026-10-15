@@ -20,6 +20,7 @@ Worship Scales verwandelt Chord-Sheets aus PDF-Dateien, Screenshots oder eingef�
 - React-/TypeScript-Single-Page-App ohne Backend
 - PDF.js f체r PDF-Text und Seiten-Rendering
 - Tesseract.js mit deutschen und englischen Sprachmodellen f체r lokale OCR im Browser
+- Spaltenerkennung f체r zweispaltige Screenshot-Tabulaturen: linke Spalte vor rechter Spalte
 - Unicode-Normalisierung f체r Umlaute und Reparatur typischer PDF-Zeichenfehler
 - Nashville-Konvertierung f체r Dur und nat체rliches Moll
 - Automatische Tonartbewertung f체r 12 Tonzentren in Dur/Moll
@@ -27,6 +28,7 @@ Worship Scales verwandelt Chord-Sheets aus PDF-Dateien, Screenshots oder eingef�
 - Akkordzeilen sowie Ultimate-Guitar-artige `[G]Inline-Akkorde`
 - Erhalt von `m`, `maj7`, `7`, `sus`, `add`, `dim`, `aug` und Slash-B채ssen
 - Editierbarer Quelltext f체r OCR-Korrekturen
+- Unklare OCR-Zeilen werden nicht als vollst채ndige Akkordzeilen eingef채rbt
 - Responsive Stage-/Editor-Ansicht
 - Druckansicht und Zwischenablage
 - Worship-Keys-Farbsystem aus `ahaz6/worship-keys` (`Design-Art.md`/`app/globals.css`, Referenz-Commit `985cc15`)

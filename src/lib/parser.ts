@@ -2,7 +2,8 @@ import type { ChartLine, ChordMapping, KeyChoice, LineKind, SongChart } from '..
 import { chordToNashville, parseChord } from './music'
 
 const SECTION_PATTERN = /^\s*\[?\s*(verse|vers|strophe|chorus|chor|refrain|pre[- ]?chorus|bridge|brücke|intro|outro|instrumental|interlude|tag|turnaround|ending)(?:\s+\d+)?\s*\]?\s*:??\s*$/i
-const META_PATTERN = /^\s*(key|tonart|capo|tuning|stimmung|tempo|bpm|title|titel|artist|interpret|von)\s*[:=\-]/i
+const META_PATTERN = /^\s*(key|tonart|capo|tuning|stimmung|tempo|bpm|title|titel|artist|interpret|von|description|beschreibung|difficulty|schwierigkeit)\s*[:=\-]/i
+const URL_PATTERN = /^\s*https?:\/\/\S+\s*$/i
 
 function tokenIsStructural(token: string): boolean {
   return /^[|:.,/\\]+$/.test(token)
@@ -12,14 +13,14 @@ function lineKind(source: string): LineKind {
   if (!source.trim()) return 'blank'
   if (SECTION_PATTERN.test(source)) return 'section'
   if (META_PATTERN.test(source)) return 'meta'
+  if (URL_PATTERN.test(source)) return 'meta'
 
   const inlineChords = [...source.matchAll(/\[([^\]]+)\]/g)].filter((match) => parseChord(match[1]))
   if (inlineChords.length) return 'mixed'
 
   const tokens = source.trim().split(/\s+/).filter(Boolean)
-  const chords = tokens.filter((token) => parseChord(token))
-  const meaningful = tokens.filter((token) => !tokenIsStructural(token)).length
-  if (chords.length >= 2 || (chords.length === 1 && meaningful <= 2)) return 'chords'
+  const meaningfulTokens = tokens.filter((token) => !tokenIsStructural(token))
+  if (meaningfulTokens.length && meaningfulTokens.every((token) => parseChord(token))) return 'chords'
   return 'lyrics'
 }
 
@@ -43,8 +44,10 @@ function extractTitle(text: string, fileName?: string): string {
   const titleMeta = text.match(/^\s*(?:title|titel)\s*[:=\-]\s*(.+)$/im)?.[1]?.trim()
   if (titleMeta) return titleMeta
 
-  const firstContent = text
-    .split(/\r?\n/)
+  const lines = text.split(/\r?\n/)
+  const firstSection = lines.findIndex((line) => SECTION_PATTERN.test(line))
+  const headingLines = firstSection === -1 ? lines : lines.slice(0, firstSection)
+  const firstContent = headingLines
     .map((line) => line.trim())
     .find((line) => line && lineKind(line) === 'lyrics')
 

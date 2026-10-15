@@ -2,6 +2,7 @@ import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist'
 import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
 import { createWorker } from 'tesseract.js'
 import type { ImportProgress } from '../types'
+import { orderTextColumns } from './layout'
 import { normalizeImportedText } from './text'
 
 GlobalWorkerOptions.workerSrc = pdfWorkerUrl
@@ -76,8 +77,22 @@ async function recognizeImage(
       preserve_interword_spaces: '1',
       user_defined_dpi: '220',
     })
-    const result = await worker.recognize(image)
-    return result.data.text
+    const result = await worker.recognize(image, {}, { blocks: true })
+    const lines = result.data.blocks?.flatMap((block) =>
+      block.paragraphs.flatMap((paragraph) =>
+        paragraph.lines.map((line) => ({
+          text: line.text.trim(),
+          x: line.bbox.x0,
+          y: line.bbox.y0,
+          width: line.bbox.x1 - line.bbox.x0,
+          height: line.bbox.y1 - line.bbox.y0,
+        })),
+      ),
+    ) ?? []
+
+    return lines.length
+      ? orderTextColumns(lines).map((line) => line.text).join('\n')
+      : result.data.text
   } finally {
     await worker.terminate()
   }

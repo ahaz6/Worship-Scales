@@ -8,6 +8,10 @@ describe('chord sheet parser', () => {
     expect(getLineKind('[Verse 1]')).toBe('section')
     expect(getLineKind('G     D/F#   Em  C')).toBe('chords')
     expect(getLineKind('Amazing grace, how sweet the sound')).toBe('lyrics')
+    expect(getLineKind('D G GD')).toBe('lyrics')
+    expect(getLineKind('D 6G')).toBe('lyrics')
+    expect(getLineKind('Description: Hillsong Worship')).toBe('meta')
+    expect(getLineKind('https://youtu.be/example')).toBe('meta')
   })
 
   it('converts inline Ultimate Guitar style chords', () => {
