@@ -33,6 +33,12 @@ Key: A
     expect(chart.lines.some((line) => line.kind === 'section' && line.output === '[Chorus]')).toBe(true)
     expect(chart.lines.some((line) => line.kind === 'mixed' && line.output.includes('Mein Erlöser lebt!'))).toBe(true)
     expect(chart.lines.every((line) => !line.output.includes('**'))).toBe(true)
+
+    const eMajor = { root: 'E', pitchClass: 4, mode: 'major' as const }
+    const eMappings = Object.fromEntries(
+      buildChart(prepared, eMajor).mappings.map(({ chord, number }) => [chord, number]),
+    )
+    expect(eMappings).toMatchObject({ E7: '1⁷', A7: '4⁷', E: '1', A: '4', 'C#m7': '6m⁷', B: '5' })
   })
 
   it('flags the corrupt chord fragments in the supplied OCR result', () => {
